@@ -1,0 +1,112 @@
+@startuml
+
+ class App {
+ }
+
+ class Main{
+ map : GameMap
+ canvas : Canvas
+ context : GraphicsContext
+ healthLabel : Label
+ + main()
+ + start() : void
+ - onKeyPressed() : void
+ - refresh() : void
+ }
+
+class Tiles{
++ TILE_WIDTH : int
+- tileset : Image
+- tileMap : Map<String, Tile>
++ drawTile() : void
+}
+
+class Tile {
++ x : int
++ y : int
++ w : int
++ h : int
++ Tile(i : int, j : int) : void
+}
+
+class MapLoader {
++ loadMap() : GameMap
+}
+
+class GameMap {
+- width : int
+- height : int
+- cells : Cell[][]
+- player : Player
++ GameMap(width, height, defaultCellType)
++ getCell(x : int, y : int) Cell
++ setPlayer(player) : void
++ getPlayer() : Player
++ getWidth() : int
++ getHeight() : int
+}
+
+interface Drawable{
++ getTileName() : String
+}
+
+enum CellType {
++ EMPTY
++ FLOOR
++ WALL
+- tileName : String
++ CellType(tileName) : void
++ getTileName() : String
+}
+
+class Cell {
+- type : CellType
+- actor : Actor
+- gameMap : GameMap
+- x : int
+- y : int
++ Cell(gameMap, x, y, type) : void
++ getType() : CellType
++ setType(type) : void
++ setActor(actor) : void
++ getActor() : Actor
++ getNeighbor() : Cell
++ getTileName() : String
++ getX() : int
++ getY() : int
+}
+
+abstract class Actor {
+- cell : Cell
+- health : int
++ Actor(cell)
++ move(dx : int, dy : int) : void
++ getHealth() : int
++ getCell() : Cell
++ getX : int
++ getY : int
+}
+
+class Skeleton {
++ Player(cell) : void
++ getTileName() : String
+}
+
+class Player {
++ Player(cell) : void
++ getTileName() : String
+}
+
+ App <--- Main
+ Drawable <|.. Cell
+ Drawable <|.. Actor
+ Actor <--- Player
+ Actor <--- Skeleton
+ Drawable --- Tiles
+ Skeleton --- MapLoader
+ Player --- MapLoader
+ Cell --- GameMap
+ Cell --- CellType
+ Tiles o-- Tile
+
+@enduml
